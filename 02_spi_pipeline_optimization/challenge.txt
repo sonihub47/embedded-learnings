@@ -1,0 +1,28 @@
+// optimize the latency
+// T1 task
+len = read_fifo_length();
+ while (len)
+ {
+     spiLen = len > COL_SIZE ? COL_SIZE : len;
+     len -= spiLen;
+     spiTransaction.count = spiLen;
+     spiTransaction.txBuf = txBuffer;
+     spiTransaction.rxBuf = rxBuffer;
+     SPI_transfer(spi, &spiTransaction);
+     osSignalPost(T2,0x12);
+
+ }
+// T3
+while(1)
+{    
+ osSignalWait(0x12);
+ image_conversion(rxBuffer, NUM_COL, rgb565);
+ osSignalPost(T2,0x22);
+}
+
+// T2
+while(1)
+{
+ osSignalWait(0x22);
+ image_processing(rgb565);
+}
