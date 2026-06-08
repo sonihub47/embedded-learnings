@@ -8,7 +8,7 @@
 // Input Data Shape: 1 X 448 (raw image) 
 // Output Data Shape: 1 X 772 (RGB565)
 // [R0, R1, .......R223][G0, G1, ...... G223][B0, B1, ...... B223]
-void image_conversion(uint8_t* input, uint16_t size, uint8_t* output)
+void image_conversion(const uint8_t* input, uint16_t size, uint8_t* output)
 { // code here
     
     // Observation: output data size should be 672 (224 * 3) and not 772 !?
