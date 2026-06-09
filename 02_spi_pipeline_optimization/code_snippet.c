@@ -21,13 +21,11 @@ while(1)
     evt = osMailGet(mail_A, osWaitForever);        // wait for mail
     if (evt.status == osEventMail) {
         rptr = evt.value.p;
-        image_conversion(rptr->rxBuffer, NUM_COL, rgb565);
+        mptr = osMailAlloc(mail_B, osWaitForever);       // Allocate memory
+        image_conversion(rptr->rxBuffer, NUM_COL, mptr->rgb565);
+        osMailPut(mail_B, mptr);
         osMailFree(mail_A, rptr);                    // free memory allocated for mail
     }    
-    
-    mptr = osMailAlloc(mail_B, osWaitForever);       // Allocate memory
-    memcpy(mptr->rgb565, rgb565, COL_SIZE);
-    osMailPut(mail_B, mptr); 
 }
 
 // T2
@@ -40,3 +38,5 @@ while(1)
         osMailFree(mail_B, rptr);                    // free memory allocated for mail
     } 
 }
+
+
