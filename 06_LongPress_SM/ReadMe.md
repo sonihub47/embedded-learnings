@@ -8,3 +8,10 @@ C2. The long press timer must be cancelled if the button is released before 2 se
 C3. After a long press fires — the machine stays in BTN_PRESSED. The button is still physically held down.
 C4. If the button is held beyond 2 seconds — emit once, not repeatedly. No re-firing on the same hold.
 C5. ButtonSM_t gets exactly one new field. common_events.h gets exactly one new entry.
+
+``Note``
+
+On a long press - it is a design decision that SM would emit both APP_EVT_BTN_PRESS & APP_EVT_BTN_LONG_PRESS
+or just the APP_EVT_BTN_LONG_PRESS!
+
+Beware - in case of a normal press - emission of APP_EVT_BTN_PRESS is deferred until we conclude if a long press was made or not.

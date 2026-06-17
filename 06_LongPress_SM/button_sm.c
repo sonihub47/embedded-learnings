@@ -69,6 +69,7 @@ void button_sm_init(ButtonSM_t         *sm,
     sm->debounce_timer   = debounce_timer;
     sm->debounceTimeMs   = debounceTimeMs;
     sm->longPressTimeSec = longPressTimeSec;
+    sm->isLongPressFired = false;
 }
 
 
@@ -126,6 +127,8 @@ static void on_enter_pressed(ButtonSM_t *sm)
     // also start timer to track for long press (say, 2secs)
     timer_start(sm);
 
+    sm->isLongPressFired = false;   // resetting for a fresh case
+
 }
 
 // on_enter_IDLE
@@ -137,6 +140,9 @@ static void on_enter_pressed(ButtonSM_t *sm)
 static void on_enter_idle(ButtonSM_t *sm)
 {
     emit_app_event(sm, APP_EVT_BTN_RELEASE);
+    // TODO: currently, event is being sent
+    // unconditionally | need to consider cold init
+    // maybe, include a field = sm->prev_state
 }
 
 // on_exit_PRESSED
@@ -230,7 +236,7 @@ static BtnState_t state_debouncing(ButtonSM_t *sm, BtnEvent_t e)
 
 static BtnState_t state_pressed(ButtonSM_t *sm, BtnEvent_t e)
 {
-    (void)sm;
+    //(void)sm;     -- now that we are actually using sm in our function body - we don't need to void cast
     switch (e) {
         case EVT_RISING_EDGE:
             
@@ -238,7 +244,7 @@ static BtnState_t state_pressed(ButtonSM_t *sm, BtnEvent_t e)
             // Transition to DEBOUNCING; on_enter_debouncing() will
             // start the timer.
             
-            if(osTimerIsRunning(sm->debounce_timer))    // this must be long press check timer
+            if(!sm->isLongPressFired)    // if 'long press app event' is not yet sent
             {
                 timer_stop(sm);
                 emit_app_event(sm, APP_EVT_BTN_PRESS);  // conclude as normal press
@@ -252,17 +258,18 @@ static BtnState_t state_pressed(ButtonSM_t *sm, BtnEvent_t e)
 
         case EVT_TIMER_EXP:         // timer has elapsed and stopped
             
-            // timer expired to track a long press!
+            // long press has been detected 
             emit_app_event(sm, APP_EVT_BTN_LONG_PRESS);
+            sm->isLongPressFired = true;
             
-            return BTN_PRESSED;
+            return BTN_PRESSED;     // state remains BTN_PRESSED
 
         default:
             return BTN_PRESSED;
     }
 }
 
-//  Internal helpers                                                    */
+//  Internal helpers
 
 // read_pin()
 // Returns 0 if LOW (pressed), 1 if HIGH (released).

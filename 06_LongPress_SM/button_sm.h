@@ -32,6 +32,7 @@ typedef struct {
     osMessageQueueId_t  app_event_queue;    // events to app layer
     uint32_t            debounceTimeMs;     // per-instance, from spec
     uint32_t            longPressTimeSec;   // long press duration to be set by App
+    bool                isLongPressFired;   // returns true if event APP_EVT_BTN_LONG_PRESS has already been sent
 } ButtonSM_t;
 
 
