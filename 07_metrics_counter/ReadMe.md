@@ -7,6 +7,7 @@ If you use a standard mutex or osDelay inside the ISR to protect the data, the s
 
 >The Interview Sandbox Code
 
+```c
 #include <stdint.h>
 #include <stdbool.h>
 #include "cmsis_os2.h"
@@ -52,4 +53,4 @@ bool System_GetMetricsSnapshot(SystemMetrics_t *out_snapshot) {
     // ----------------------
     return true;
 }
-
+```
