@@ -5,7 +5,7 @@
 typedef struct
 {
     char* mutable_string;
-    const char* delim;
+    const char* delim;      // Application is expected to pass a non-NULL value
 } strtok_t;
 
 char* strtok_r(strtok_t* detoken);
@@ -13,15 +13,14 @@ char* strtok_r(strtok_t* detoken);
 // check
 static bool is_delimiter(const char ch, const char* delim_list)
 {
-    uint32_t index = 0;
-    while(ch != delim_list[index])
-    {
-        index++;
-
-        if(delim_list[index] == '\0')   // delimiter list ended
-            return false;
+    while(*delim_list != '\0')      // check for NUL character first
+    {   
+        if(*delim_list == ch)
+            return true;
+        
+        delim_list++;
     }
-    return true;
+    return false;
 }
 
 // return the ref character
@@ -64,7 +63,7 @@ char* strtok_r(strtok_t* detoken)
     end = start;
     end++;
     ch = *end;
-    while(!is_delimiter(ch, detoken->delim))
+    while(ch != '\0' && !is_delimiter(ch, detoken->delim))      // a NUL character encounter must be a Hard Stop!
     {
         end++;
         ch = *end;
@@ -89,11 +88,10 @@ int main()
     token_1.mutable_string = ip;
     token_1.delim = ":";
 
-    printf("%s\n",strtok_r(&token_1));
-    printf("%s\n",strtok_r(&token_1));
-    printf("%s\n",strtok_r(&token_1));
-    printf("%s\n",strtok_r(&token_1));
-    printf("%s\n",strtok_r(&token_1));
+    char* ret;
+
+    while((ret = strtok_r(&token_1)) != NULL)
+        printf("%s\n", ret);
 
     return 0;
 }
