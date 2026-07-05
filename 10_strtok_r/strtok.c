@@ -76,7 +76,8 @@ char* strtok_r(strtok_t* detoken)
         return start;
     } 
 
-    detoken->mutable_string = end++;
+    *end = '\0';    
+    detoken->mutable_string = ++end;
     return start;
     
 }
@@ -88,6 +89,10 @@ int main()
     token_1.mutable_string = ip;
     token_1.delim = ":";
 
+    printf("%s\n",strtok_r(&token_1));
+    printf("%s\n",strtok_r(&token_1));
+    printf("%s\n",strtok_r(&token_1));
+    printf("%s\n",strtok_r(&token_1));
     printf("%s\n",strtok_r(&token_1));
 
     return 0;
