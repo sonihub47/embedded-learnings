@@ -72,21 +72,22 @@ void *my_memmove(void *dest, const void *src, size_t n)
     if(dest == src)
         return dest;
 
-    unsigned int counter = 0;
+    unsigned int counterFWD = 0;
+    signed int counterBKW = 0;
 
     if(dest > src)
     {
-        for(counter =(n-1); counter >= 0; counter--)
+        for(counterBKW =(n-1); counterBKW >= 0; counterBKW--)
         {
-            *((unsigned char*)dest + counter) = *((unsigned char*)src + counter);
+            *((unsigned char*)dest + counterBKW) = *((unsigned char*)src + counterBKW);
         }
     }
     
     if(dest < src)
     {
-        for(counter =0; counter < n; counter++)
+        for(counterFWD =0; counterFWD < n; counterFWD++)
         {
-            *((unsigned char*)dest + counter) = *((unsigned char*)src + counter);
+            *((unsigned char*)dest + counterFWD) = *((unsigned char*)src + counterFWD);
         }
     }
 
