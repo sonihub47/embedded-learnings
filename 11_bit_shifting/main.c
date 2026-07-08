@@ -117,7 +117,7 @@ static int g_fail = 0;
 #define CHECK(desc, cond) do { \
     if (cond) { g_pass++; printf("[PASS] %s\n", desc); } \
     else      { g_fail++; printf("[FAIL] %s\n", desc); } \
-} while (0);
+} while (0)
  
 int main(void)
 {
