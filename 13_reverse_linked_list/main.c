@@ -12,7 +12,7 @@ node_t *reverse_list(node_t *head)
 {
     node_t* prev, *next, *current;
 
-    if((head->next == NULL) || (head == NULL))
+    if((head == NULL) || (head->next == NULL))
         return head;
 
     current = head;
