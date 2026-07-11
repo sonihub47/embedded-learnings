@@ -16,7 +16,7 @@ void reverse_arr(int32_t *arr, uint32_t len)
     uint32_t index = 0, pos = 0;
     printf("len = %u\n",len);
     // reverse the original array in place
-    for(index = 0, pos = (len-1); (index <= len/2) && (pos >= len/2); index ++, pos--)
+    for(index = 0, pos = (len-1); (index < pos); index ++, pos--)
     {
         printf("index = %u | pos = %u\n", index, pos);
         swap(&arr[index], &arr[pos]);
@@ -25,7 +25,7 @@ void reverse_arr(int32_t *arr, uint32_t len)
 
 void rotate_right(int32_t *arr, uint32_t len, uint32_t k)
 {
-    if((k == 0) || (k == len))
+    if((k == 0) || (k == len) || (len ==0))
         return;
 
     if(k > len)
