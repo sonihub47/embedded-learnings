@@ -15,3 +15,7 @@ Output string = Hello!! Hope you are fine! Great !!! Take care !!!!
 You decide: does the buffer need to grow? Who owns the returned memory?
 (malloc vs modifying in place vs fixed-size caller-provided buffer --
  pick your approach, just be consistent and don't overflow anything.)
+
+ ---
+
+ #Copying/moving strings in overlapping regions = Use memmove !!
