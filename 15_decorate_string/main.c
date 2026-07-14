@@ -18,43 +18,58 @@
 //  pick your approach, just be consistent and don't overflow anything.)
 // ----------------------------------------------------------------------
 char* decorate(char* str) {
-    // YOUR CODE HERE
-    int32_t curr = 0, prev = -1;        // prev = -1 => invalid
+    
+    char* prev = str, *curr = (str+1);
+    uint32_t new_len = 0;
+    uint32_t old_len = strlen(str);
+    int32_t index_prev = 0, index_curr = 0;
 
-    if(strlen(str) == 0)
-        return str;
+    // 2 pass
 
-    uint32_t ori_len = strlen(str);
-
-    do
+    // first pass - calculate new string length
+    while(*prev != '\0')
     {
-        if((str[prev] == '!') && (str[curr] != '!') && (prev != -1))       // transition detected
-        {
-            if(str[curr] != '\0')
-                memmove(&str[curr+1], &str[curr], ori_len - curr + 1);
-            else
-                memmove(&str[curr+1], &str[curr], 1);
-            
-            str[curr] = '!';
+        new_len++;
 
-            prev = -1;  // so that new ! is not considered for transition 
-        }
-        else
+        if((*prev == '!') && (*curr != '!'))    // transition detected
         {
-            prev = curr;
+            new_len++;
         }
 
+        prev = curr;
         curr++;
-    }while(str[curr-1] != '\0');
+    }
 
-    curr = 0;                   // reset
-    while(str[curr] != '\0')
+    curr = str;
+    prev = str;
+    index_curr = new_len;
+    curr[index_curr] = '\0';
+    index_curr = (new_len-1);
+    index_prev = (old_len-1);
+
+    // second pass
+    // read the original string from the end i.e. from right
+    // and copy into new string place (overlapped from left)
+    // keep adding new ! where required
+    while(index_curr >= 0)
     {
-        // convert . to ! logic
-        if(str[curr] == '.')
-            str[curr] = '!';
-        
-        curr++;
+        // if transition found - add one !
+        if((prev[index_prev] == '!') && (prev[index_prev+1] != '!'))
+        {
+            curr[index_curr--] = '!';
+            curr[index_curr] = prev[index_prev];
+        }
+        else if(prev[index_prev] == '.')   // dot found - replace with !
+        {
+            curr[index_curr] = '!';
+        }
+        else        // simply copy
+        {
+            curr[index_curr] = prev[index_prev];
+        }
+
+        index_curr--;
+        index_prev--;
     }
 
     return str;

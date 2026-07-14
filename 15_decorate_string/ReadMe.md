@@ -15,3 +15,20 @@ Output string = Hello!! Hope you are fine! Great !!! Take care !!!!
 You decide: does the buffer need to grow? Who owns the returned memory?
 (malloc vs modifying in place vs fixed-size caller-provided buffer --
  pick your approach, just be consistent and don't overflow anything.)
+
+
+ ---
+
+ #Update
+
+ The version committed is expensive in terms of multiple memory function invocations. 
+
+ There is a better approach to it called "Backward two-pointer fill"
+
+The core idea: two passes — count first, then fill from the back.
+
+Pass 1 (left to right): figure out the final length before touching anything.
+
+Pass 2 (right to left): write directly into final positions, no shifting.
+
+Why backward is the trick that makes it safe: writing forward while growing the string means you keep overwriting data you haven't read yet (that's exactly the shifting problem you were fighting). Writing backward, the write pointer is always ahead of the read pointer (since new_len ≥ old_len), so you never clobber a character before you've read it.
