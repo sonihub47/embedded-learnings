@@ -1,3 +1,7 @@
+// Mail queues used here in this snippet have been deprecated 
+// https://arm-software.github.io/CMSIS_5/develop/RTOS2/html/os2MigrationFunctions.html#mig_mailQueue
+// Keep it just for understanding purpose ! (can be replaced with some other queue or buffer pool etc.)
+
 // optimize the latency
 // T1 task
 len = read_fifo_length();
